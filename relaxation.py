@@ -15,10 +15,9 @@ class Relaxation:
         interpolate = int(points_per_m * dist)
         segment_interval = dist / interpolate
         
-        interpolated = np.vstack((np.linspace(trajectory.coordinates[i][0], trajectory.coordinates[j][0], interpolate), 
+        interpolated = np.column_stack((np.linspace(trajectory.coordinates[i][0], trajectory.coordinates[j][0], interpolate), 
                                   np.linspace(trajectory.coordinates[i][1], trajectory.coordinates[j][1], interpolate)))
 
-        
 
         cost = 0
 
