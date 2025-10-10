@@ -53,9 +53,10 @@ class Trajectory:
 
 
 class CostMap:
-    data = np.array([[]])
-    origin = np.asarray([0, 0])
-    resolution = 0.25
+    def __init__(self):
+        self.data = np.array([[]])
+        self.origin = np.asarray([0, 0])
+        self.resolution = 0.25
 
 
 class Environment:
