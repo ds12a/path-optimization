@@ -26,7 +26,7 @@ class Relaxation:
             + np.pow(trajectory.coordinates[i][1] - trajectory.coordinates[j][1], 2)
         )
 
-        points_per_m = 20
+        points_per_m = 3
         interpolate = int(points_per_m * dist)  # total number of interpolated points
         segment_interval = dist / interpolate  # distance between interpolated points
         # print(segment_interval)
@@ -35,13 +35,13 @@ class Relaxation:
             (
                 np.linspace(
                     trajectory.coordinates[i][0],
-                    trajectory.coordinates[j][0] + 0,
+                    trajectory.coordinates[j][0],
                     interpolate,
                     endpoint=False
                 ),
                 np.linspace(
                     trajectory.coordinates[i][1],
-                    trajectory.coordinates[j][1] + 0,
+                    trajectory.coordinates[j][1],
                     interpolate,
                     endpoint=False
                 ),
@@ -50,7 +50,11 @@ class Relaxation:
         # print(len(interpolated) - interpolate)
         cost = 0.0
 
-        # print(interpolate)
+        print(interpolated)
+        fobar = list(map(lambda l: cartesian_to_ij(ctx, l), interpolated))
+        print(fobar)
+        print(list(map(lambda l: cost_map.data[*l[::-1]], fobar)))
+        print("\n\n\n")
 
         for x, y in interpolated:
             # print(x, y)

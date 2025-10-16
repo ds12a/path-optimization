@@ -78,7 +78,7 @@ def cartesian_to_ij(context: Context, cart_coord: np.ndarray) -> np.ndarray:
     :param cart_coord: array of x and y cartesian coordinates
     :return: array of i and j coordinates for the occupancy grid
     """
-    return np.floor(
+    return np.round(
         (cart_coord[0:2] - context.env.cost_map.origin)
         / context.env.cost_map.resolution
     ).astype(np.int32)
