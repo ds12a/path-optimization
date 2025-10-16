@@ -56,7 +56,7 @@ class CostMap:
     def __init__(self):
         self.data = np.array([[]])
         self.origin = np.asarray([0, 0])
-        self.resolution = 0.25
+        self.resolution = 1.0
 
 
 class Environment:
