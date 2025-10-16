@@ -26,7 +26,7 @@ class Relaxation:
             + np.pow(trajectory.coordinates[i][1] - trajectory.coordinates[j][1], 2)
         )
 
-        points_per_m = 1
+        points_per_m = 4
         interpolate = int(points_per_m * dist)  # total number of interpolated points
         segment_interval = dist / interpolate  # distance between interpolated points
         # print(segment_interval)
@@ -52,12 +52,18 @@ class Relaxation:
 
         # print(interpolate)
 
-        for i, (x, y) in enumerate(interpolated):
+        for x, y in interpolated:
             # print(x, y)
             cost += (
-                segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))]
+                segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
             )  # TODO check if this cost function can "overcount" cost
 
+            # foo = segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
+            # if i == 0 and j == 2 and foo != 0:
+            #     print("DEBUG")
+            #     print(trajectory)
+            #     print(x, y, foo)
+            #     print("\n\n")
         return cost
 
     @staticmethod
@@ -134,5 +140,4 @@ class Relaxation:
             )
             print(candidate_cost, cost)
         _, foo = Relaxation.cost_full(ctx, current_trajectory, cost_map)
-        print(foo)
         return current_trajectory

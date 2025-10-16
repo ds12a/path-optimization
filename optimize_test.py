@@ -44,7 +44,7 @@ context.env = env
 print(trajectory)
 new_trajectory = Relaxation.relax(context, trajectory, cost_map)
 print(new_trajectory)
-
+# print("test", Relaxation.cost_segment(context, new_trajectory, cost_map, 0, 2))
 
 fig, ax = plt.subplots()
 ax.imshow(255-cost_map.data, cmap='gray', vmin=0, vmax=255)
@@ -54,6 +54,7 @@ ax.set_xticks(np.arange(-.5, len(cost_map.data[0]), 1))
 ax.set_yticks(np.arange(-.5, len(cost_map.data), 1))
 ax.tick_params(axis='both', which='both', labelsize=0)
 
-plt.plot(trajectory.coordinates[:, 0], trajectory.coordinates[:, 1])
+plt.plot(trajectory.coordinates[:, 0], trajectory.coordinates[:, 1], color='r')
+plt.plot(new_trajectory.coordinates[:, 0], new_trajectory.coordinates[:, 1])
 
 plt.show()
