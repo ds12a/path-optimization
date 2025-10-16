@@ -37,9 +37,11 @@ trajectory = Trajectory(np.array(arr2))
 env.cost_map = cost_map
 context.env = env
 
-# np.set_printoptions(precision=2, suppress=True, linewidth=np.inf)
-# print(cost_map.data)
-# print(trajectory.coordinates)
+# print(Relaxation.cost_segment(context, trajectory, cost_map, 36, 37))
+
+np.set_printoptions(precision=2, suppress=True, linewidth=np.inf)
+print(cost_map.data)
+print(trajectory.coordinates)
 
 print(trajectory)
 new_trajectory = Relaxation.relax(context, trajectory, cost_map)

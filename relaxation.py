@@ -26,7 +26,7 @@ class Relaxation:
             + np.pow(trajectory.coordinates[i][1] - trajectory.coordinates[j][1], 2)
         )
 
-        points_per_m = 2
+        points_per_m = 3
         interpolate = int(points_per_m * dist)  # total number of interpolated points
         segment_interval = dist / interpolate  # distance between interpolated points
         # print(segment_interval)
@@ -35,13 +35,13 @@ class Relaxation:
             (
                 np.linspace(
                     trajectory.coordinates[i][0],
-                    trajectory.coordinates[j][0] + 0.1,
+                    trajectory.coordinates[j][0],
                     interpolate,
                     endpoint=False
                 ),
                 np.linspace(
                     trajectory.coordinates[i][1],
-                    trajectory.coordinates[j][1] + 0.1,
+                    trajectory.coordinates[j][1],
                     interpolate,
                     endpoint=False
                 ),
@@ -50,7 +50,11 @@ class Relaxation:
         # print(len(interpolated) - interpolate)
         cost = 0.0
 
-        # print(interpolate)
+        print(interpolated)
+        fobar = list(map(lambda l: cartesian_to_ij(ctx, l), interpolated))
+        print(fobar)
+        print(list(map(lambda l: cost_map.data[*l[::-1]], fobar)))
+        print("\n\n\n")
 
         for x, y in interpolated:
             # print(x, y)
@@ -58,12 +62,12 @@ class Relaxation:
                 segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
             )  # TODO check if this cost function can "overcount" cost
 
-            foo = segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
-            if foo != 0:
-                print("DEBUG")
-                print(trajectory)
-                print(x, y, foo)
-                print("\n\n")
+            # foo = segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
+            # if foo != 0:
+            #     print("DEBUG")
+            #     print(trajectory)
+            #     print(x, y, foo)
+            #     print("\n\n")
         return cost
 
     @staticmethod
