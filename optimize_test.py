@@ -54,7 +54,7 @@ ax.set_xticks(np.arange(-.5, len(cost_map.data[0]), 1))
 ax.set_yticks(np.arange(-.5, len(cost_map.data), 1))
 ax.tick_params(axis='both', which='both', labelsize=0)
 
-plt.plot(trajectory.coordinates[:, 0], trajectory.coordinates[:, 1], color='r')
-plt.plot(new_trajectory.coordinates[:, 0], new_trajectory.coordinates[:, 1])
+plt.plot(trajectory.coordinates[:, 0], trajectory.coordinates[:, 1], 'o-', color='r', )
+plt.plot(new_trajectory.coordinates[:, 0], new_trajectory.coordinates[:, 1], 'o-')
 
 plt.show()

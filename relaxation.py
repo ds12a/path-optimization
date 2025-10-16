@@ -26,7 +26,7 @@ class Relaxation:
             + np.pow(trajectory.coordinates[i][1] - trajectory.coordinates[j][1], 2)
         )
 
-        points_per_m = 2
+        points_per_m = 20
         interpolate = int(points_per_m * dist)  # total number of interpolated points
         segment_interval = dist / interpolate  # distance between interpolated points
         # print(segment_interval)
@@ -35,13 +35,13 @@ class Relaxation:
             (
                 np.linspace(
                     trajectory.coordinates[i][0],
-                    trajectory.coordinates[j][0] + 0.1,
+                    trajectory.coordinates[j][0] + 0,
                     interpolate,
                     endpoint=False
                 ),
                 np.linspace(
                     trajectory.coordinates[i][1],
-                    trajectory.coordinates[j][1] + 0.1,
+                    trajectory.coordinates[j][1] + 0,
                     interpolate,
                     endpoint=False
                 ),
@@ -58,12 +58,12 @@ class Relaxation:
                 segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
             )  # TODO check if this cost function can "overcount" cost
 
-            foo = segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
-            if foo != 0:
-                print("DEBUG")
-                print(trajectory)
-                print(x, y, foo)
-                print("\n\n")
+            # foo = segment_interval * cost_map.data[*cartesian_to_ij(ctx, np.array([x, y]))[::-1]]
+            # if foo != 0:
+            #     print("DEBUG")
+            #     print(trajectory)
+            #     print(x, y, foo)
+            #     print("\n\n")
         return cost
 
     @staticmethod
@@ -100,8 +100,8 @@ class Relaxation:
         for i in range(1, len(trajectory.coordinates) - 1):
             cost_i = Relaxation.cost_segment(ctx, trajectory, cost_map, i - 1, i + 1)
             diff_i = (segment_costs[i - 1] + segment_costs[i]) - cost_i
-            # print(cost_i, (segment_costs[i - 1] + segment_costs[i]))
             if max_diff < diff_i:
+                print("test", i, cost_i, (segment_costs[i - 1] + segment_costs[i]))
                 min_cost = cost_i
                 min_idx = i
                 max_diff = diff_i
@@ -110,6 +110,7 @@ class Relaxation:
         # print(trajectory.coordinates)
         # print(np.append(trajectory.coordinates[:min_idx], 
         #                                 trajectory.coordinates[min_idx+1:], axis=0))
+        print(f"Removing {trajectory.coordinates[min_idx]} diff: {max_diff} idx: {min_idx}")
         new_traj = Trajectory(np.append(trajectory.coordinates[:min_idx], 
                                         trajectory.coordinates[min_idx+1:], axis=0))
         # print(len(trajectory.coordinates), len(new_traj.coordinates))
