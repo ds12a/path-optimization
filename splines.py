@@ -1,6 +1,7 @@
 from stolen import Trajectory, CostMap, Context, cartesian_to_ij
 
 import matplotlib.pyplot as plt
+import scipy
 from scipy.interpolate import make_splprep, splev
 import numpy as np
 
@@ -27,12 +28,12 @@ class SplineInterpolation:
         """
         # can configure smoothness (s) and other parameters
         spline, u = make_splprep(
-            [trajectory.coordinates[:, 0], trajectory.coordinates[:, 1]], s=0
+            [trajectory.coordinates[:, 0], trajectory.coordinates[:, 1]], s=1
         )
 
         # make really smooth for accurate distance
         u_fine = np.linspace(u.min(), u.max(), 5000)  # TODO find good number
-        x_fine, y_fine = splev(u_fine, spline)
+        x_fine, y_fine = spline(u_fine)
 
         # calculate distance from start for each point
         dist = np.cumsum(np.sqrt(np.diff(x_fine) ** 2 + np.diff(y_fine) ** 2))
@@ -46,6 +47,6 @@ class SplineInterpolation:
 
         # np.concatenate(u_spaced, u) TODO maybe also include original u in input so that all original waypoints are still used
 
-        x_spaced, y_spaced = splev(u_spaced, spline)
+        x_spaced, y_spaced = spline(u_spaced)
 
         return Trajectory(np.column_stack([x_spaced, y_spaced]))
