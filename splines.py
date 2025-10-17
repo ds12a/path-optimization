@@ -28,11 +28,11 @@ class SplineInterpolation:
         """
         # can configure smoothness (s) and other parameters
         spline, u = make_splprep(
-            [trajectory.coordinates[:, 0], trajectory.coordinates[:, 1]], s=1
+            [trajectory.coordinates[:, 0], trajectory.coordinates[:, 1]], s=0,k=2
         )
 
         # make really smooth for accurate distance
-        u_fine = np.linspace(u.min(), u.max(), 5000)  # TODO find good number
+        u_fine = np.linspace(u.min(), u.max(), 100)  # TODO find good number
         x_fine, y_fine = spline(u_fine)
 
         # calculate distance from start for each point

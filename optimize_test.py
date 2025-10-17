@@ -21,34 +21,25 @@ with open(COSTMAP_FILE) as f:
    
 grid = []
 for l in g:
-    # print(re.split(r'[\[\] ,]+', l)[1:-1])
     arr = list(map(lambda v: 240 if v=='3' else 0, re.split(r'[\[\] ,]+', l)[1:-1]))
-    # print(arr)
     grid.append(arr)
-cost_map.data = np.array(grid)
+cost_map.data = np.asarray(grid, dtype=np.float64)
 
 with open(PATH_FILE) as f:
-    # print(re.split(r'[\[\] ,\(\)]+', f.readline().strip())[1:-1])
     arr1 = list(map(int, re.split(r'[\[\] ,\(\)]+', f.readline().strip())[1:-1]))
     arr2 = []
     for i in range(len(arr1) // 2):
         arr2.append([arr1[2 * i], arr1[2 * i + 1]])
-trajectory = Trajectory(np.array(arr2))
+trajectory = Trajectory(np.asarray(arr2))
 
 env.cost_map = cost_map
 context.env = env
 
-# print(Relaxation.cost_segment(context, trajectory, cost_map, 36, 37))
 
 np.set_printoptions(precision=2, suppress=True, linewidth=np.inf)
-print(cost_map.data)
-print(trajectory.coordinates)
 
-print(trajectory)
 new_trajectory = Relaxation.relax(context, trajectory, cost_map)
 newer_trajectory = SplineInterpolation.interpolate(context, new_trajectory, cost_map)
-print(new_trajectory)
-# print("test", Relaxation.cost_segment(context, new_trajectory, cost_map, 0, 2))
 
 fig, ax = plt.subplots()
 ax.imshow(255-cost_map.data, cmap='gray', vmin=0, vmax=255)
