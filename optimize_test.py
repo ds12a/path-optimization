@@ -41,6 +41,9 @@ np.set_printoptions(precision=2, suppress=True, linewidth=np.inf)
 new_trajectory = Relaxation.relax(context, trajectory, cost_map)
 newer_trajectory = SplineInterpolation.interpolate(context, new_trajectory, cost_map)
 
+print(Relaxation.cost_full(context, new_trajectory, cost_map))
+print(Relaxation.cost_full(context, newer_trajectory, cost_map))
+
 fig, ax = plt.subplots()
 ax.imshow(255-cost_map.data, cmap='gray', vmin=0, vmax=255)
 

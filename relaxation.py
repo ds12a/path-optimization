@@ -15,9 +15,11 @@ class Relaxation:
     ) -> float:
         """
         Calculates the cost of the straight-line path between coordinate indices i and j
-        in the given trajectory. The method interpolates floor(length(path)) evenly-spaced
+        in the given trajectory. The method interpolates ceil(length(path)) evenly-spaced
         points in the path segment and returns an approximation of "total cost"
         (cost * path length).
+
+        trajectory is in cost map coordinates
         """
 
         # distance between start and end points
@@ -27,33 +29,33 @@ class Relaxation:
         )
 
         points_per_m = 3
-        interpolate = int(points_per_m * dist)  # total number of interpolated points
+        interpolate = math.ceil(points_per_m * dist)  # total number of interpolated points
         segment_interval = dist / interpolate  # distance between interpolated points
-
         interpolated = np.column_stack(
             (
                 np.linspace(
                     trajectory.coordinates[i][0],
                     trajectory.coordinates[j][0],
                     interpolate,
-                    endpoint=False,
                 ),
                 np.linspace(
                     trajectory.coordinates[i][1],
                     trajectory.coordinates[j][1],
                     interpolate,
-                    endpoint=False,
                 ),
             )
         )
+
+
         cost = 0.0
 
         for x, y in interpolated:
+            print(x,y)
             cost += (
                 segment_interval
-                * (cost_map.data[*cartesian_to_ij(ctx, np.asarray([x, y]))[::-1]] + 0.001) # make cost nonzero so distance matters
+                * (cost_map.data[int(y + 0.5), int(x + 0.5)] + 0.001) # make cost nonzero so distance matters
             )  # TODO check if this cost function can "overcount" cost
-
+        print(cost)
         return cost
 
     @staticmethod
@@ -65,7 +67,6 @@ class Relaxation:
 
         for i in range(len(trajectory.coordinates) - 1):
             cost_i = Relaxation.cost_segment(ctx, trajectory, cost_map, i, i + 1)
-
             total_cost += cost_i
             segment_costs.append(cost_i)
 
