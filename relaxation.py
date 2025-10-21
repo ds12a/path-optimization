@@ -50,12 +50,26 @@ class Relaxation:
         cost = 0.0
 
         for x, y in interpolated:
-            print(x,y)
-            cost += (
-                segment_interval
-                * (cost_map.data[int(y + 0.5), int(x + 0.5)] + 0.001) # make cost nonzero so distance matters
-            )  # TODO check if this cost function can "overcount" cost
-        print(cost)
+            # print(x,y)
+
+            if abs(0.5 - (x - int(x))) < 1e-5 and abs(0.5 - (y - int(y))) < 1e-5:     # Close to boundary
+                cost_arr = [
+                    cost_map.data[int(x), int(y)],
+                    cost_map.data[int(x) + 1, int(y)],
+                    cost_map.data[int(x), int(y) + 1],
+                    cost_map.data[int(x) + 1, int(y) + 1]
+                    ]
+                
+                cost += segment_interval * (min(cost_arr) + 0.001)
+
+                # if cost_arr[0] != 0.0 or cost_arr[1] != 0.0 or cost_arr[2] != 0.0 or cost_arr[3] != 0.0:
+                #     print("rounding workaround", x, y, cost_arr, segment_interval * (min(cost_arr) + 0.001))
+            else:
+                cost += (
+                    segment_interval
+                    * (cost_map.data[int(y + 0.5), int(x + 0.5)] + 0.001) # make cost nonzero so distance matters
+                )
+        # print(cost)
         return cost
 
     @staticmethod
